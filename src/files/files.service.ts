@@ -18,6 +18,10 @@ export class FilesService {
   async remove(id: number): Promise<void> {
     await this.FilesRepository.delete(id);
   }
+  async create(file: FileEntity): Promise<FileEntity> {
+    const newFile = this.FilesRepository.create(file)
+    return await this.FilesRepository.save(newFile)
+  }
 
 
 	// uploadFile() {

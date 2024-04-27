@@ -8,6 +8,8 @@ export class User {
   @Column()
   name: string;
   @Column()
+  password: string;
+  @Column()
   email: string;
 	@ManyToMany(() => Group, (group) => group.users)
   groups: Group[];

@@ -6,13 +6,15 @@ export class FileEntity {
   @PrimaryGeneratedColumn()
   id: number;
   @Column()
+  name: string;
+  @Column()
   type: string;
   @Column()
-  description: string;
+  original_name: string;
 	@Column()
-  size: string;
-	@ManyToOne(() => Group, (group) => group.files)
+  size: number;
+	@ManyToOne(() => Group, (group) => group.files, {nullable: true})
   group: Group;
-  @ManyToOne(() => User, (user) => user.files)
+  @ManyToOne(() => User, (user) => user.files, {nullable: true})
   user: User;
 }
