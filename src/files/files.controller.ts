@@ -8,16 +8,25 @@ import { FileEntity } from './enities/files.entity';
 // import { createReadStream } from 'node:fs';
 import { Response as expRes } from 'express' ;
 import { createReadStream } from 'fs';
+import { IFilesService } from './files.service.interface';
 
 @Controller('files')
 export class FilesController {
   constructor(
     @Inject(FilesService)
-    private _filesService: FilesService /// Заменить на интерфейс IFilesService
+    private _filesService: IFilesService
   ){}
 
-	@Get("getFileById")
-	async getFileById(@Param('id') id: number, @Response({passthrough: true}) res: expRes): Promise<StreamableFile>{
+  @Get("getFileById/:id")
+	async getFileById(@Param('id') id: number): Promise<FileEntity>{
+    const fileColumn = await this._filesService.findOne(id)
+    
+    return fileColumn
+
+	}
+
+	@Get("downloadById/:id")
+	async downloadById(@Param('id') id: number, @Response({passthrough: true}) res: expRes): Promise<StreamableFile>{
     const fileColumn = await this._filesService.findOne(id)
     const file = createReadStream(join(process.cwd() + '/uploads', fileColumn.name));
 

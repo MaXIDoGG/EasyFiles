@@ -2,9 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FileEntity } from './enities/files.entity';
 import { Repository } from 'typeorm';
+import { IFilesService } from './files.service.interface';
 
 @Injectable()
-export class FilesService {
+export class FilesService implements IFilesService {
 	constructor(
     @InjectRepository(FileEntity)
     private FilesRepository: Repository<FileEntity>,
@@ -22,9 +23,4 @@ export class FilesService {
     const newFile = this.FilesRepository.create(file)
     return await this.FilesRepository.save(newFile)
   }
-
-
-	// uploadFile() {
-		
-	// }
 }
