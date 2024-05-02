@@ -9,12 +9,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { FileEntity } from './files/enities/files.entity';
 import { User } from './auth/entities/user.entity';
 import { Group } from './group/entities/group.entity';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
     AuthModule,
     FilesModule,
     GroupModule,
+    ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
@@ -23,10 +25,11 @@ import { Group } from './group/entities/group.entity';
       password: '123',
       database: 'easy_files',
       entities: [FileEntity, User, Group],
-      synchronize: true,
+      synchronize: true, // TODO: выключить эту настройку на проде
     }),
   ],
   controllers: [AppController, AuthController],
   providers: [AppService],
 })
 export class AppModule {}
+

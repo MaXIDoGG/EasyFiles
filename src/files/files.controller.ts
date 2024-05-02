@@ -32,7 +32,8 @@ export class FilesController {
 
     res.set({
       'Content-Type': fileColumn.type,
-      'Content-Disposition': `attachment; filename=${fileColumn.original_name}`
+      'Content-Disposition': `attachment; filename=${fileColumn.original_name}`,
+      'Access-Control-Allow-Origin': "*"
     })
     return new StreamableFile(file);
 	}
