@@ -7,9 +7,10 @@ import { FilesModule } from './files/files.module';
 import { GroupModule } from './group/group.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { FileEntity } from './files/enities/files.entity';
-import { User } from './auth/entities/user.entity';
+import { User } from './users/entities/user.entity';
 import { Group } from './group/entities/group.entity';
 import { ConfigModule } from '@nestjs/config';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { ConfigModule } from '@nestjs/config';
       entities: [FileEntity, User, Group],
       synchronize: true, // TODO: выключить эту настройку на проде
     }),
+    UsersModule,
   ],
   controllers: [AppController, AuthController],
   providers: [AppService],

@@ -32,6 +32,7 @@ export class FilesController {
 
     res.set({
       'Content-Type': fileColumn.type,
+      'Access-Control-Expose-Headers': 'Content-Disposition',
       'Content-Disposition': `attachment; filename=${fileColumn.original_name}`,
       'Access-Control-Allow-Origin': "*"
     })
