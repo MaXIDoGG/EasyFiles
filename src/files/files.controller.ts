@@ -5,7 +5,6 @@ import { diskStorage } from 'multer';
 import { extname, join } from 'path';
 import { FilesService } from './files.service';
 import { FileEntity } from './enities/files.entity';
-// import { createReadStream } from 'node:fs';
 import { Response as expRes } from 'express' ;
 import { createReadStream } from 'fs';
 import { IFilesService } from './files.service.interface';
