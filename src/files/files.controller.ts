@@ -1,4 +1,4 @@
-import { Controller, Get, Header, HttpStatus, Inject, Param, Post, Res, Response, StreamableFile, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Header, HttpStatus, Inject, Param, Post, Res, Response, StreamableFile, UploadedFile, UseInterceptors, UseGuards, Headers, Req } from '@nestjs/common';
 import { FileInterceptor, MulterModule } from '@nestjs/platform-express';
 import { ApiBody, ApiConsumes } from '@nestjs/swagger';
 import { diskStorage } from 'multer';
@@ -8,6 +8,7 @@ import { FileEntity } from './enities/files.entity';
 import { Response as expRes } from 'express' ;
 import { createReadStream } from 'fs';
 import { IFilesService } from './files.service.interface';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('files')
 export class FilesController {
@@ -16,15 +17,14 @@ export class FilesController {
     private _filesService: IFilesService
   ){}
 
+  @Post("createFile")
+
   @Get("getFilesByGroup/:id")
   async getFilesByGroup() {}
 
   @Get("getFileById/:id")
 	async getFileById(@Param('id') id: number): Promise<FileEntity>{
-    const fileColumn = await this._filesService.findOne(id)
-    
-    return fileColumn
-
+    return this._filesService.findOne(id)
 	}
 
 	@Get("downloadById/:id")
@@ -42,6 +42,8 @@ export class FilesController {
 	}
 
 
+
+  @UseGuards(JwtAuthGuard)
 	@Post("uploadFile")
 	@UseInterceptors(FileInterceptor('file', {
   storage: diskStorage({
@@ -66,8 +68,10 @@ export class FilesController {
     },
 	})
 	@ApiConsumes('multipart/form-data')
-	async uploadFile(@UploadedFile() file: Express.Multer.File): Promise<HttpStatus> {
+	async uploadFile(@Req() req, @UploadedFile() file: Express.Multer.File): Promise<HttpStatus> {
     console.log(file);
+    console.log(req.user)
+    
     const newFile = new FileEntity()
     newFile.name = file.filename
     newFile.original_name = file.originalname
