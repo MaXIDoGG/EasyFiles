@@ -16,6 +16,9 @@ export class FilesController {
     private _filesService: IFilesService
   ){}
 
+  @Get("getFilesByGroup/:id")
+  async getFilesByGroup() {}
+
   @Get("getFileById/:id")
 	async getFileById(@Param('id') id: number): Promise<FileEntity>{
     const fileColumn = await this._filesService.findOne(id)

@@ -17,10 +17,12 @@ import { UsersModule } from './users/users.module';
     AuthModule,
     FilesModule,
     GroupModule,
-    ConfigModule.forRoot(),
+    // ConfigModule.forRoot({
+    //   envFilePath: 
+    // }),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'postgres',
+      host: 'localhost',
       port: 5432,
       username: 'postgres',
       password: '123',
@@ -30,7 +32,7 @@ import { UsersModule } from './users/users.module';
     }),
     UsersModule,
   ],
-  controllers: [AppController, AuthController],
+  controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}
