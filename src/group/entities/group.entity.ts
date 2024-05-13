@@ -1,6 +1,6 @@
 import { User } from 'src/users/entities/user.entity';
 import { FileEntity } from 'src/files/enities/files.entity';
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, OneToMany, ManyToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, OneToMany, ManyToMany, JoinTable } from 'typeorm';
 @Entity()
 export class Group {
   @PrimaryGeneratedColumn()
@@ -11,6 +11,7 @@ export class Group {
   description: string;
 	@OneToMany(() => FileEntity, (file) => file.group)
   files: FileEntity[];
-  @ManyToMany(() => User, (user) => user.groups)
+  @ManyToMany(( ) => User, (user) => user.groups)
+  @JoinTable()
   users: User[];
 }

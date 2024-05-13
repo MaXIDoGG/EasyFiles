@@ -8,6 +8,7 @@ async function bootstrap() {
   app.enableCors()
   
   const config = new DocumentBuilder()
+    .addBearerAuth()
     .setTitle('FileExtension')
     .setDescription('Описание API для расширения')
     .setVersion('1.0')

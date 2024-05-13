@@ -37,7 +37,7 @@ export class UsersService implements IUsersService {
   }
 
   async getUserByEmail(email: string): Promise<User> {
-    const user = await this.UsersRepository.findOne({where: {email}})
-    return user
+    console.log(email)
+    return this.UsersRepository.findOneBy({email: email})
   }
 }
