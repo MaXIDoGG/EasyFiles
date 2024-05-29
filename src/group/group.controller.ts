@@ -5,6 +5,7 @@ import { CreateGroupDto } from './dto/create-group.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UsersService } from 'src/users/users.service';
+import { User } from 'src/users/entities/user.entity';
 
 @ApiTags('Группы')
 @ApiBearerAuth()
@@ -26,6 +27,7 @@ export class GroupController {
 		newGroup.description = groupDto.description
 		console.log(req.user.email)
 		const user = await this._usersService.getUserByEmail(req.user.email)
+		
 		// console.log(user)
 		// newGroup.users.push(user)
 		newGroup = await this._groupService.create(newGroup)
@@ -39,4 +41,12 @@ export class GroupController {
 	async getGroupById(@Param('id') id: number): Promise<Group>{
     return this._groupService.findOne(id)
 	}
+
+	@UseGuards(JwtAuthGuard)
+  @Get("getGroupUsersById/:id")
+	@ApiOperation({summary: 'Получить участников по ID группы'})
+	async getGroupUsersById(@Param('id') id: number): Promise<User[]>{
+    return this._groupService.getUsers(id)	
+	}
+
 }

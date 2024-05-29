@@ -11,7 +11,9 @@ export class Group {
   description: string;
 	@OneToMany(() => FileEntity, (file) => file.group)
   files: FileEntity[];
-  @ManyToMany(( ) => User, (user) => user.groups)
+  @ManyToMany(() => User, (user) => user.groups, {
+    cascade: true,
+  })
   @JoinTable()
   users: User[];
 }

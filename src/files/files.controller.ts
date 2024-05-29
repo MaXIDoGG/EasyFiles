@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Header, HttpStatus, Inject, Param, Post, Res, Response, StreamableFile, UploadedFile, UseInterceptors, UseGuards, Headers, Req } from '@nestjs/common';
 import { FileInterceptor, MulterModule } from '@nestjs/platform-express';
-import { ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { diskStorage } from 'multer';
 import { extname, join } from 'path';
 import { FilesService } from './files.service';
@@ -11,6 +11,7 @@ import { IFilesService } from './files.service.interface';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @ApiTags('Файловая система')
+@ApiBearerAuth()
 @Controller('files')
 export class FilesController {
   constructor(
@@ -19,12 +20,14 @@ export class FilesController {
   ){}
 
   @Get("getFileById/:id")
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({summary: 'Получить информацию о файле по ID'})
 	async getFileById(@Param('id') id: number): Promise<FileEntity>{
     return this._filesService.findOne(id)
 	}
 
 	@Get("downloadById/:id")
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({summary: 'Скачать файл по ID'})
 	async downloadById(@Param('id') id: number, @Response({passthrough: true}) res: expRes): Promise<StreamableFile>{
     const fileColumn = await this._filesService.findOne(id)
@@ -39,8 +42,9 @@ export class FilesController {
     return new StreamableFile(file);
 	}
 
-  @UseGuards(JwtAuthGuard)
+  
 	@Post("uploadFile")
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({summary: 'Загрузить файл'})
 	@UseInterceptors(FileInterceptor('file', {
   storage: diskStorage({

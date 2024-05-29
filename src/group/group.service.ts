@@ -36,4 +36,12 @@ export class GroupService {
 		group.users = [user]
 		return await this.GroupRepository.save(group)
 	}
+
+  async getUsers(groupId: number): Promise<User[]> {
+    const group = await this.GroupRepository.findOne({where: {id: groupId}, relations: ['users']})
+    console.log(group)
+    console.log(group.users)
+    console.log(1234)
+    return group.users
+  }
 }

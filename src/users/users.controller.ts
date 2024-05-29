@@ -1,13 +1,14 @@
 import { Controller, Inject, Param, Post, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { IUsersService } from './Users.service.interface';
+import { IUsersService } from './users.service.interface';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
 import { FileEntity } from 'src/files/enities/files.entity';
 import { Group } from 'src/group/entities/group.entity';
 
 @ApiTags('Пользователи')
+@ApiBearerAuth()
 @Controller('users')
 export class UsersController {
 	constructor(
