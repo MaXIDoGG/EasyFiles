@@ -13,7 +13,7 @@ import { Group } from 'src/group/entities/group.entity';
 export class UsersController {
 	constructor(
     @Inject(UsersService)
-    private _usersService: IUsersService
+    private _usersService: UsersService
   ){}
 
 
@@ -35,15 +35,15 @@ export class UsersController {
 	@UseGuards(JwtAuthGuard)
 	@Post("getUserFilesById")
 	async getUserFilesById(@Param('id') id: number): Promise<FileEntity[]> {
-		const user = await this._usersService.findOne(id)
-		return user.files
+		const files = await this._usersService.findUserFiles(id)
+		return files
 	}
 
 	@ApiOperation({summary: 'Получить все группы пользователя по его ID'})
 	@UseGuards(JwtAuthGuard)
 	@Post("getUserGroupsById")
 	async getUserGroupsById(@Param('id') id: number): Promise<Group[]> {
-		const user = await this._usersService.findOne(id)
-		return user.groups
+		const groups = await this._usersService.findUserGroups(id)
+		return groups
 	}
 }

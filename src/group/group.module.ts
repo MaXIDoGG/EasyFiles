@@ -1,15 +1,16 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { GroupController } from './group.controller';
 import { GroupService } from './group.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { Group } from './entities/group.entity';
-import { UsersService } from 'src/users/users.service';
 import { UsersModule } from 'src/users/users.module';
+import { FilesModule } from 'src/files/files.module';
 
 @Module({
   imports: [
     UsersModule,
+    forwardRef(() => FilesModule),
     TypeOrmModule.forFeature([Group]),
     JwtModule.register({
       secret: "secret", // TODO: Добавить переменную окружения
@@ -19,6 +20,9 @@ import { UsersModule } from 'src/users/users.module';
     })
   ],
   controllers: [GroupController],
-  providers: [GroupService]
+  providers: [GroupService],
+  exports: [
+    GroupService
+  ]
 })
 export class GroupModule {}

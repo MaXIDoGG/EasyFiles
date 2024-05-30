@@ -9,6 +9,9 @@ import { Response as expRes } from 'express';
 import { createReadStream } from 'fs';
 import { IFilesService } from './files.service.interface';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { UsersService } from 'src/users/users.service';
+import { IUsersService } from 'src/users/users.service.interface';
+import { GroupService } from 'src/group/group.service';
 
 @ApiTags('Файловая система')
 @ApiBearerAuth()
@@ -16,7 +19,11 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 export class FilesController {
   constructor(
     @Inject(FilesService)
-    private _filesService: IFilesService
+    private _filesService: IFilesService,
+    @Inject(UsersService)
+    private _usersService: UsersService,
+    @Inject(GroupService)
+    private _groupService: GroupService
   ){}
 
   @Get("getFileById/:id")
@@ -84,6 +91,9 @@ export class FilesController {
     newFile.original_name = file.originalname
     newFile.type = file.mimetype
     newFile.size = file.size
+    newFile.user = await this._usersService.getUserByEmail(req.user.email)
+    newFile.group = await this._groupService.findOne(body.groupId)
+    
     // newFile.group = 
     await this._filesService.create(newFile)
     return HttpStatus.CREATED

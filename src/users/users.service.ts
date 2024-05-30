@@ -16,12 +16,12 @@ export class UsersService implements IUsersService {
     return this.UsersRepository.find();
   }
 	async findUserGroups(userId: number): Promise<Group[]> {
-		let user = await this.UsersRepository.findOneBy({id: userId});
+		let user = await this.UsersRepository.findOne({where: {id: userId}, relations: ['groups']});
 		return user.groups;
 	}
 
 	async findUserFiles(userId: number): Promise<FileEntity[]> {
-		let user = await this.UsersRepository.findOneBy({id: userId});
+		let user = await this.UsersRepository.findOne({where: {id: userId}, relations: ['files']});
 		return user.files;
 	}
 

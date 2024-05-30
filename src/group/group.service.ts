@@ -39,9 +39,11 @@ export class GroupService {
 
   async getUsers(groupId: number): Promise<User[]> {
     const group = await this.GroupRepository.findOne({where: {id: groupId}, relations: ['users']})
-    console.log(group)
-    console.log(group.users)
-    console.log(1234)
     return group.users
+  }
+
+  async getFiles(groupId: number): Promise<FileEntity[]> {
+    const group = await this.GroupRepository.findOne({where: {id: groupId}, relations: ['files']})
+    return group.files
   }
 }
