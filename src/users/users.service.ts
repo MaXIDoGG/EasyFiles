@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { Equal, Repository } from 'typeorm';
 import { IUsersService } from './users.service.interface';
 import { User } from './entities/user.entity';
 import { Group } from 'src/group/entities/group.entity';
@@ -16,12 +16,14 @@ export class UsersService implements IUsersService {
     return this.UsersRepository.find();
   }
 	async findUserGroups(userId: number): Promise<Group[]> {
-		let user = await this.UsersRepository.findOne({where: {id: userId}, relations: ['groups']});
-		return user.groups;
+		let user = await this.UsersRepository.findOne({where: {id: userId}, relations: { groups: true }});
+    console.log(user)
+    console.log(1235);
+		return user ? user.groups : null;
 	}
 
 	async findUserFiles(userId: number): Promise<FileEntity[]> {
-		let user = await this.UsersRepository.findOne({where: {id: userId}, relations: ['files']});
+		let user = await this.UsersRepository.findOne({where: {id: userId}, relations: { files: true }});
 		return user.files;
 	}
 

@@ -23,6 +23,13 @@ export class UsersController {
 	async getUserById(@Param('id') id: number): Promise<User> {
 		return this._usersService.findOne(id)
 	}
+
+	@ApiOperation({summary: 'Получить пользователя по ID'})
+	@UseGuards(JwtAuthGuard)
+	@Get("getUserByEmail/:email")
+	async getUserByEmail(@Param('email') email: string): Promise<User> {
+		return this._usersService.getUserByEmail(email)
+	}
 	
 	@ApiOperation({summary: 'Получить всех пользователей'})
 	@UseGuards(JwtAuthGuard)
@@ -33,7 +40,7 @@ export class UsersController {
 
 	@ApiOperation({summary: 'Получить все файлы пользователя по его ID'})
 	@UseGuards(JwtAuthGuard)
-	@Get("getUserFilesById")
+	@Get("getUserFilesById/:id")
 	async getUserFilesById(@Param('id') id: number): Promise<FileEntity[]> {
 		const files = await this._usersService.findUserFiles(id)
 		return files
@@ -41,7 +48,7 @@ export class UsersController {
 
 	@ApiOperation({summary: 'Получить все группы пользователя по его ID'})
 	@UseGuards(JwtAuthGuard)
-	@Get("getUserGroupsById")
+	@Get("getUserGroupsById/:id")
 	async getUserGroupsById(@Param('id') id: number): Promise<Group[]> {
 		const groups = await this._usersService.findUserGroups(id)
 		return groups
